@@ -42,9 +42,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupKalkulatorButton() {
-        binding.kalkulatorButton.setOnClickListener {
+        binding.kalkulator.setOnClickListener {
             startActivity(Intent(this, KalkulatorActivity::class.java))
         }
     }
-
 }

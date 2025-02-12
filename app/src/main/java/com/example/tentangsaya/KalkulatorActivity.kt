@@ -1,11 +1,11 @@
 package com.example.tentangsaya
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tentangsaya.databinding.ActivityKalkulatorBinding
-import android.media.MediaPlayer
-
+import java.util.Stack
 
 class KalkulatorActivity : AppCompatActivity() {
     private lateinit var binding: ActivityKalkulatorBinding
@@ -36,101 +36,48 @@ class KalkulatorActivity : AppCompatActivity() {
 
     private fun onButtonClick(view: View) {
         when (view.id) {
-            binding.angka0.id -> {
-                playSound(R.raw.click1)
-                appendToInput("0")
-            }
-            binding.angka1.id -> {
-                playSound(R.raw.click2)
-                appendToInput("1")
-            }
-            binding.angka2.id -> {
-                playSound(R.raw.click17)
-                appendToInput("2")
-            }
-            binding.angka3.id -> {
-                playSound(R.raw.click4)
-                appendToInput("3")
-            }
-            binding.angka4.id -> {
-                playSound(R.raw.click21)
-                appendToInput("4")
-            }
-            binding.angka5.id -> {
-                playSound(R.raw.click6)
-                appendToInput("5")
-            }
-            binding.angka6.id -> {
-                playSound(R.raw.click7)
-                appendToInput("6")
-            }
-            binding.angka7.id -> {
-                playSound(R.raw.click8)
-                appendToInput("7")
-            }
-            binding.angka8.id -> {
-                playSound(R.raw.click9)
-                appendToInput("8")
-            }
-            binding.angka9.id -> {
-                playSound(R.raw.click19)
-                appendToInput("9")
-            }
-            binding.koma.id -> {
-                playSound(R.raw.click11)
-                appendToInput(".")
-            }
-            binding.tambah.id -> {
-                playSound(R.raw.click12)
-                appendToInput("+")
-            }
-            binding.kurang.id -> {
-                playSound(R.raw.click13)
-                appendToInput("-")
-            }
-            binding.kali.id -> {
-                playSound(R.raw.click14)
-                appendToInput("*")
-            }
-            binding.bagi.id -> {
-                playSound(R.raw.click15)
-                appendToInput("/")
-            }
-            binding.persen.id -> {
-                playSound(R.raw.click18)
-                appendToInput("%")
-            }
-            binding.hapus.id -> {
-                playSound(R.raw.click3)
-                removeLastCharacter()
-            }
-            binding.hapussemua.id -> {
-                playSound(R.raw.click16)
-                clearInput()
-            }
-            binding.samadengan.id -> {
-                playSound(R.raw.click10)
-                calculateResult()
-            }
+            binding.angka0.id -> appendToInput("0", R.raw.click1)
+            binding.angka1.id -> appendToInput("1", R.raw.click2)
+            binding.angka2.id -> appendToInput("2", R.raw.click17)
+            binding.angka3.id -> appendToInput("3", R.raw.click4)
+            binding.angka4.id -> appendToInput("4", R.raw.click21)
+            binding.angka5.id -> appendToInput("5", R.raw.click6)
+            binding.angka6.id -> appendToInput("6", R.raw.click7)
+            binding.angka7.id -> appendToInput("7", R.raw.click8)
+            binding.angka8.id -> appendToInput("8", R.raw.click9)
+            binding.angka9.id -> appendToInput("9", R.raw.click19)
+            binding.koma.id -> appendToInput(".", R.raw.click11)
+            binding.tambah.id -> appendToInput("+", R.raw.click12)
+            binding.kurang.id -> appendToInput("-", R.raw.click13)
+            binding.kali.id -> appendToInput("*", R.raw.click14)
+            binding.bagi.id -> appendToInput("/", R.raw.click15)
+            binding.persen.id -> appendToInput("%", R.raw.click18)
+            binding.hapus.id -> removeLastCharacter(R.raw.click3)
+            binding.hapussemua.id -> clearInput(R.raw.click16)
+            binding.samadengan.id -> calculateResult(R.raw.click10)
         }
         updateDisplay()
     }
 
-    private fun appendToInput(value: String) {
+    private fun appendToInput(value: String, soundResId: Int) {
+        playSound(soundResId)
         input += value
     }
 
-    private fun removeLastCharacter() {
+    private fun removeLastCharacter(soundResId: Int) {
+        playSound(soundResId)
         if (input.isNotEmpty()) {
             input = input.substring(0, input.length - 1)
         }
     }
 
-    private fun clearInput() {
+    private fun clearInput(soundResId: Int) {
+        playSound(soundResId)
         input = ""
     }
 
-    private fun calculateResult() {
+    private fun calculateResult(soundResId: Int) {
+        playSound(soundResId)
         try {
             val result = evaluateExpression(input)
             input = if (result.isNaN()) "Error" else result.toString()
@@ -141,37 +88,81 @@ class KalkulatorActivity : AppCompatActivity() {
     }
 
     private fun evaluateExpression(expression: String): Double {
-        try {
-            val tokens = expression.split("(?<=[-+*/])|(?=[-+*/])".toRegex()).toMutableList()
+        return try {
+            val postfix = infixToPostfix(expression)
+            evaluatePostfix(postfix)
+        } catch (e: Exception) {
+            Double.NaN
+        }
+    }
 
-            for (i in tokens.indices) {
-                if (tokens[i].contains("%")) {
-                    val number = tokens[i].replace("%", "").toDouble() / 100
-                    tokens[i] = number.toString()
-                }
-            }
+    private fun infixToPostfix(expression: String): List<String> {
+        val output = mutableListOf<String>()
+        val operators = Stack<Char>()
+        var number = ""
 
-            var result = tokens[0].toDouble()
-            var operator = ""
-
-            for (i in 1 until tokens.size) {
-                when (tokens[i]) {
-                    "+", "-", "*", "/" -> operator = tokens[i]
-                    else -> {
-                        val num = tokens[i].toDouble()
-                        result = when (operator) {
-                            "+" -> result + num
-                            "-" -> result - num
-                            "*" -> result * num
-                            "/" -> result / num
-                            else -> num
-                        }
+        for (char in expression) {
+            when {
+                char.isDigit() || char == '.' -> number += char
+                char == '%' -> {
+                    if (number.isNotEmpty()) {
+                        output.add((number.toDouble() / 100).toString())
+                        number = ""
                     }
                 }
+
+                "+-*/".contains(char) -> {
+                    if (number.isNotEmpty()) {
+                        output.add(number)
+                        number = ""
+                    }
+                    while (operators.isNotEmpty() && precedence(operators.peek()) >= precedence(char)) {
+                        output.add(operators.pop().toString())
+                    }
+                    operators.push(char)
+                }
             }
-            return result
-        } catch (e: Exception) {
-            return Double.NaN
+        }
+
+        if (number.isNotEmpty()) {
+            output.add(number)
+        }
+        while (operators.isNotEmpty()) {
+            output.add(operators.pop().toString())
+        }
+
+        return output
+    }
+
+    private fun evaluatePostfix(postfix: List<String>): Double {
+        val stack = Stack<Double>()
+
+        for (token in postfix) {
+            when {
+                token.toDoubleOrNull() != null -> stack.push(token.toDouble())
+                "+-*/".contains(token) -> {
+                    val b = stack.pop()
+                    val a = stack.pop()
+                    stack.push(
+                        when (token) {
+                            "+" -> a + b
+                            "-" -> a - b
+                            "*" -> a * b
+                            "/" -> a / b
+                            else -> 0.0
+                        }
+                    )
+                }
+            }
+        }
+        return if (stack.isNotEmpty()) stack.pop() else Double.NaN
+    }
+
+    private fun precedence(op: Char): Int {
+        return when (op) {
+            '+', '-' -> 1
+            '*', '/' -> 2
+            else -> 0
         }
     }
 
@@ -179,17 +170,17 @@ class KalkulatorActivity : AppCompatActivity() {
         binding.teks.text = input
     }
 
-    private fun handleUser(){
-        binding.logout.setOnClickListener{
-            playSound(R.raw.click20)
+    private fun handleUser() {
+        binding.logout.setOnClickListener {
             finish()
         }
     }
 
-
     private fun playSound(soundResId: Int) {
         val mediaPlayer = MediaPlayer.create(this, soundResId)
-        mediaPlayer.setOnCompletionListener { it.release() }
         mediaPlayer.start()
+        mediaPlayer.setOnCompletionListener { mp ->
+            mp.release()
+        }
     }
 }

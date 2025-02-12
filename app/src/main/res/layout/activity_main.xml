@@ -74,6 +74,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginEnd="252dp"
         android:layout_marginBottom="15dp"
+        android:backgroundTint="#F44336"
         android:text="Logout"
         app:layout_constraintBottom_toTopOf="@+id/icon_scroll_view"
         app:layout_constraintEnd_toEndOf="parent"
@@ -94,6 +95,22 @@
             android:orientation="horizontal">
 
             <!-- Icons -->
+            <LinearLayout
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp">
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/icon6" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kalkulator" />
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
@@ -204,6 +221,24 @@
 
             <!-- Content Block 1 -->
             <LinearLayout
+                android:id="@+id/kalkulator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginVertical="4dp">
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/icon6" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:text="Kalkulator" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -287,15 +322,5 @@
 
         </LinearLayout>
     </ScrollView>
-
-    <Button
-        android:id="@+id/kalkulator_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Kalkulator"
-        app:layout_constraintBottom_toTopOf="@+id/icon_scroll_view"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/logout_button"
-        app:layout_constraintTop_toBottomOf="@+id/profile_description" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
