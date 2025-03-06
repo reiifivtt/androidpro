@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.tentangsaya.databinding.ActivityMainBinding
+import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding:ActivityMainBinding
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
         handleUser()
         setupKalkulatorButton()
+        setupNoteButton()
     }
 
     private fun handleUser(){
@@ -37,8 +39,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.logoutButton.setOnClickListener{
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
             finish()
         }
+
     }
 
     private fun setupKalkulatorButton() {
@@ -46,4 +51,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, KalkulatorActivity::class.java))
         }
     }
+
+    private fun setupNoteButton() {
+        binding.note.setOnClickListener {
+            startActivity(Intent(this, NoteActivity::class.java))
+        }
+    }
+
+
 }

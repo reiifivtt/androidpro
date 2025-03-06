@@ -17,6 +17,7 @@
         android:scaleType="centerCrop"
         app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/header" />
@@ -84,6 +85,7 @@
         android:id="@+id/icon_scroll_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/logout_button"
         app:layout_constraintStart_toStartOf="parent"
@@ -95,6 +97,22 @@
             android:orientation="horizontal">
 
             <!-- Icons -->
+            <LinearLayout
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp">
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/icon7" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Notes" />
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
@@ -126,6 +144,7 @@
                     android:layout_height="wrap_content"
                     android:text="Icon 1" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
@@ -141,6 +160,7 @@
                     android:layout_height="wrap_content"
                     android:text="Icon 2" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
@@ -156,6 +176,7 @@
                     android:layout_height="wrap_content"
                     android:text="Icon 3" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
@@ -171,6 +192,7 @@
                     android:layout_height="wrap_content"
                     android:text="Icon 4" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
@@ -209,6 +231,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginVertical="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintTop_toBottomOf="@id/project_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -220,6 +245,27 @@
             android:orientation="vertical">
 
             <!-- Content Block 1 -->
+            <LinearLayout
+                android:id="@+id/note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="4dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/icon7" />
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:text="Saya membuat aplikasi catatan sederhana dengan fitur CRUD (Create, Read, Update, Delete). Aplikasi ini menggunakan RecyclerView untuk menampilkan daftar catatan dan SQLite sebagai penyimpanan data." />
+            </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/kalkulator"
                 android:layout_width="match_parent"
@@ -235,7 +281,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
-                    android:text="Kalkulator" />
+                    android:text="Saya membuat kalkulator sederhana menggunakan Android Studio dengan bahasa pemrograman kotlin." />
             </LinearLayout>
 
             <LinearLayout
